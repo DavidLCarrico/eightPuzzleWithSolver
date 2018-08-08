@@ -19,6 +19,8 @@ void puzzleSolver::solve(const eightPuzzle &state)
         fringe.pop();
         expandNode(tNode);
     }
+
+    deleteTree();
 }
 
 char puzzleSolver::getMove()
@@ -117,7 +119,6 @@ void puzzleSolver::buildSolution(treeNode *goalNode)
     }
 
     foundSolution = true;
-    deleteTree();
 }
 
 void puzzleSolver::deleteTree()
