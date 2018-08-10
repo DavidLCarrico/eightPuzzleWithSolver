@@ -70,7 +70,7 @@ void puzzleSolver::setRoot(const eightPuzzle & state)
 
     newNode->state = state;
     newNode->length = 0;
-    newNode->move = 'n';
+    newNode->move = '\0';
     newNode->parent = nullptr;
 
     fringe.push(newNode);
@@ -109,7 +109,7 @@ void puzzleSolver::buildSolution(treeNode *goalNode)
     treeNode *temp = goalNode;
     while (temp)
     {
-        if (temp->move != 'n')
+        if (temp->move != '\0')
         {
             solution.push(temp->move);
         }
