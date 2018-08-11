@@ -49,28 +49,6 @@ bool eightPuzzle::operator==(const eightPuzzle &otherPuzzle) const
     return isEqual;
 }
 
-bool eightPuzzle::operator<(const eightPuzzle &otherPuzzle) const
-{
-    bool notMore = true, isLess = false;
-    // I think this is lexicographical order
-    for (int i = 0; notMore && !isLess && i < 3; ++i)
-    {
-        for (int j = 0; notMore && !isLess && j < 3; ++j)
-        {
-            if (board[i][j] < otherPuzzle.board[i][j])
-            {
-                isLess = true;
-            }
-            else
-            {
-                notMore = notMore && board[i][j] == otherPuzzle.board[i][j];
-            }
-        }
-    }
-
-    return isLess;
-}
-
 int eightPuzzle::hammingDist() const
 {
     int dist = 0, number = 1;

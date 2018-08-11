@@ -9,7 +9,22 @@ class eightPuzzle
         eightPuzzle();
         const eightPuzzle& operator=(const eightPuzzle &otherPuzzle);
         bool operator==(const eightPuzzle &otherPuzzle) const;
-        bool operator<(const eightPuzzle &otherPuzzle) const;
+        struct fnvHash // This should be an implementation of the fnv-1a hash algorithm from http://www.isthe.com/chongo/tech/comp/fnv/
+        {
+            inline unsigned int operator()(const eightPuzzle &state) const
+            {
+                unsigned int h = 2166136261;
+                for (int i = 0; i < 3; ++i)
+                {
+                    for (int j = 0; j < 3; ++j)
+                    {
+                        h ^= state.board[i][j];
+                        h *= 16777619;
+                    }
+                }
+                return (h >> 14) ^ (h & 0x3ffff);
+            }
+        };
         int hammingDist() const;
         void scramble();
         bool move(char direction);
