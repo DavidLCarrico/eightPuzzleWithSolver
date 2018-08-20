@@ -6,7 +6,22 @@
 #include <stack>
 #include <unordered_set>
 #include "eightPuzzle.hpp"
-#include "treeNode.hpp"
+
+struct treeNode
+{
+    eightPuzzle state;
+    int length;
+    char move;
+    treeNode *parent;
+};
+
+struct comparePath
+{
+    inline bool operator()(const treeNode *first, const treeNode *second) const
+    {
+        return first->length + first->state.hammingDist() > second->length + second->state.hammingDist();
+    }
+};
 
 class puzzleSolver
 {
@@ -24,7 +39,7 @@ class puzzleSolver
         std::stack<char> solution;
         std::vector<treeNode*> nodesInTree;
         std::unordered_set<eightPuzzle, eightPuzzle::fnvHash> statesInTree;
-        std::priority_queue<treeNode*, std::vector<treeNode*>, cmpNodes> fringe; 
+        std::priority_queue<treeNode*, std::vector<treeNode*>, comparePath> fringe; 
         bool foundSolution;
 };
 
