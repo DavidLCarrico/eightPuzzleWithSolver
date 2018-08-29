@@ -9,19 +9,25 @@ class eightPuzzle
         eightPuzzle();
         const eightPuzzle& operator=(const eightPuzzle &otherPuzzle);
         bool operator==(const eightPuzzle &otherPuzzle) const;
-        struct fnvHash // This should be an implementation of the fnv-1a hash algorithm from http://www.isthe.com/chongo/tech/comp/fnv/
+        struct joaatHash // This should be the Jenkins one_at_a_time hash <https://en.wikipedia.org/wiki/Jenkins_hash_function> with xor folding
         {
             inline unsigned int operator()(const eightPuzzle &state) const
             {
-                unsigned int h = 2166136261;
+                unsigned int h = 0;
                 for (int i = 0; i < 3; ++i)
                 {
                     for (int j = 0; j < 3; ++j)
                     {
-                        h ^= state.board[i][j];
-                        h *= 16777619;
+                        h += state.board[i][j];
+                        h += h << 10;
+                        h ^= h >> 6;
                     }
                 }
+
+                h += h << 3;
+                h ^= h >> 11;
+                h += h << 15;
+
                 return (h >> 14) ^ (h & 0x3ffff);
             }
         };
