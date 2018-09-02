@@ -9,7 +9,7 @@ class eightPuzzle
         eightPuzzle();
         const eightPuzzle& operator=(const eightPuzzle &otherPuzzle);
         bool operator==(const eightPuzzle &otherPuzzle) const;
-        struct joaatHash // This should be the Jenkins one_at_a_time hash <https://en.wikipedia.org/wiki/Jenkins_hash_function> with xor folding
+        struct saxHash // This should be the shift-add-XOR hash <http://eternallyconfuzzled.com/tuts/algorithms/jsw_tut_hashing.aspx> with xor folding
         {
             inline unsigned int operator()(const eightPuzzle &state) const
             {
@@ -18,15 +18,9 @@ class eightPuzzle
                 {
                     for (int j = 0; j < 3; ++j)
                     {
-                        h += state.board[i][j];
-                        h += h << 10;
-                        h ^= h >> 6;
+                        h ^= (h << 5) + (h >> 2) + state.board[i][j];
                     }
                 }
-
-                h += h << 3;
-                h ^= h >> 11;
-                h += h << 15;
 
                 return (h >> 14) ^ (h & 0x3ffff);
             }
