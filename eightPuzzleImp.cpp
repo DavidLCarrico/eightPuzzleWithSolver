@@ -56,7 +56,7 @@ int eightPuzzle::hammingDist() const
     {
         for (int j = 0; j < 3; ++j)
         {
-            if (board[i][j] != number++ % 9)
+            if (board[i][j] != number++ % 9 && board[i][j])
             {
                 ++dist;
             }
