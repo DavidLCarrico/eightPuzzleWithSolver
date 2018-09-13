@@ -25,7 +25,7 @@ class eightPuzzle
                 return (h >> 14) ^ (h & 0x3ffff);
             }
         };
-        int hammingDist() const;
+        int manhattanDist() const;
         void scramble();
         bool move(char direction);
         void print() const;
