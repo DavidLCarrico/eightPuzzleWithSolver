@@ -1,7 +1,10 @@
 // Names of Contributors: David Carrico
 #include <cstdlib>
 #include <ctime>
+#include <unordered_map>
 #include "eightPuzzle.hpp"
+
+const std::unordered_map<int, std::pair<int, int>> indexOf = {{1, {0, 0}}, {2, {0, 1}}, {3, {0, 2}}, {4, {1, 0}}, {5, {1, 1}}, {6, {1, 2}}, {7, {2, 0}}, {8, {2, 1}}};
 
 eightPuzzle::eightPuzzle()
 {
@@ -38,6 +41,7 @@ const eightPuzzle& eightPuzzle::operator=(const eightPuzzle &otherPuzzle)
 bool eightPuzzle::operator==(const eightPuzzle &otherPuzzle) const
 {
     bool isEqual = true;
+
     for (int i = 0; isEqual && i < 3; ++i)
     {
         for (int j = 0; isEqual && j < 3; ++j)
@@ -49,16 +53,19 @@ bool eightPuzzle::operator==(const eightPuzzle &otherPuzzle) const
     return isEqual;
 }
 
-int eightPuzzle::hammingDist() const
+int eightPuzzle::manhattanDist() const
 {
-    int dist = 0, number = 1;
+    int dist = 0;
+    std::unordered_map<int, std::pair<int, int>>::const_iterator it;
+
     for (int i = 0; i < 3; ++i)
     {
         for (int j = 0; j < 3; ++j)
         {
-            if (board[i][j] != number++ % 9 && board[i][j])
+            it = indexOf.find(board[i][j]);
+            if (it != indexOf.end())
             {
-                ++dist;
+                dist += abs(i - it->second.first) + abs(j - it->second.second);
             }
         }
     }
@@ -69,6 +76,7 @@ int eightPuzzle::hammingDist() const
 void eightPuzzle::scramble()
 {
     std::srand(std::time(nullptr));
+
     for (int i = 0; i < 3; ++i)
     {
         for (int j = 0; j < 3; ++j)
@@ -79,7 +87,7 @@ void eightPuzzle::scramble()
                 value = std::rand() % 9;
             }
             while (!isNewValue(value, i, j));
-            
+
             board[i][j] = value;
             if (value == 0)
             {
@@ -184,6 +192,7 @@ bool eightPuzzle::isSolved() const
 bool eightPuzzle::isNewValue(short int value, int row, int column) const
 {
     bool isNew = true;
+
     for (int i = 0; i < 3; ++i)
     {
         for (int j = 0; j < 3; ++j)
@@ -226,4 +235,4 @@ int eightPuzzle::numberOfInversions() const
     }
 
     return totalNumberOfInversions;
-}       
+}

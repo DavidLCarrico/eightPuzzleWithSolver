@@ -19,7 +19,7 @@ struct comparePath
 {
     inline bool operator()(const treeNode *first, const treeNode *second) const
     {
-        return first->length + first->state.hammingDist() > second->length + second->state.hammingDist();
+        return first->length + first->state.manhattanDist() > second->length + second->state.manhattanDist();
     }
 };
 
