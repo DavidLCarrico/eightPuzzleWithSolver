@@ -1,16 +1,18 @@
-all: puzzleGame.bin
+CC = g++
+CPPFLAGS = -Wall -Wextra -Werror -O4
+objects = puzzleSolverImp.o eightPuzzleImp.o main.o
 
-puzzleGame.bin: main.o eightPuzzleImp.o puzzleSolverImp.o
-	g++ -Wall -g -o puzzleGame.bin main.o eightPuzzleImp.o puzzleSolverImp.o
+all: puzzleGame
 
-main.o: main.cpp
-	g++ -Wall -g -c main.cpp
+puzzleGame: main.o eightPuzzleImp.o puzzleSolverImp.o
+	$(CC) $(CPPFLAGS) -o puzzleGame main.o eightPuzzleImp.o puzzleSolverImp.o
 
-eightPuzzleImp.o: eightPuzzleImp.cpp
-	g++ -Wall -g -c eightPuzzleImp.cpp
+$(objects): eightPuzzle.hpp puzzleSolver.hpp
 
-puzzleSolverImp.o: puzzleSolverImp.cpp
-	g++ -Wall -g -c puzzleSolverImp.cpp
+.PHONY: cleanobjects
+cleanobjects:
+	-rm $(objects)
 
+.PHONY: clean
 clean:
-	rm *.o
+	-rm puzzleGame $(objects)
