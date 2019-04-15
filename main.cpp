@@ -73,11 +73,7 @@ int main()
             }
 
             std::cout << "\n\nWould you like to play again (y/n)? ";
-            std::cin.get(choice);
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-            choice = std::tolower(choice);
+            choice = getChar();
         }
     }
     while (choice == 'y');
