@@ -111,7 +111,7 @@ void puzzleSolver::buildSolution(treeNode *goalNode)
     treeNode *temp = goalNode;
     while (temp)
     {
-        if (temp->move != '\0')
+        if (temp->move)
         {
             solution.push(temp->move);
         }
