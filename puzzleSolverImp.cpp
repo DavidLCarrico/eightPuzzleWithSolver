@@ -41,7 +41,7 @@ void puzzleSolver::expandNode(treeNode *path)
 {
     treeNode *addedNode;
     
-    for (int i = 0; !foundSolution && i < 4; ++i)
+    for (int i = 0; i < 4; ++i)
     {
         switch (i)
         {
@@ -61,7 +61,9 @@ void puzzleSolver::expandNode(treeNode *path)
 
         if (addedNode && addedNode->state.isSolved())
         {
+            foundSolution = true;
             buildSolution(addedNode);
+            break;
         }
     }
 }
@@ -117,8 +119,6 @@ void puzzleSolver::buildSolution(treeNode *goalNode)
         }
         temp = temp->parent;
     }
-
-    foundSolution = true;
 }
 
 void puzzleSolver::deleteTree()

@@ -25,7 +25,7 @@ class eightPuzzle
                 return (h >> 14) ^ (h & 0x3ffff);
             }
         };
-        int manhattanDist() const;
+        size_t manhattanDist() const;
         void scramble();
         bool move(char direction);
         void print() const;
@@ -33,9 +33,9 @@ class eightPuzzle
     private:
         bool isNewValue(short int value, int row, int column) const;
         int numberOfInversions() const;
+        short int board[3][3];
         int rowOfZero;
         int columnOfZero;
-        short int board[3][3];
 };
 
 #endif

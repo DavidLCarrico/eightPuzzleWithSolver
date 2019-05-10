@@ -10,7 +10,7 @@
 struct treeNode
 {
     eightPuzzle state;
-    int length;
+    size_t length;
     char move;
     treeNode *parent;
 };
@@ -39,7 +39,7 @@ class puzzleSolver
         std::stack<char> solution;
         std::vector<treeNode*> nodesInTree;
         std::unordered_set<eightPuzzle, eightPuzzle::saxHash> statesInTree;
-        std::priority_queue<treeNode*, std::vector<treeNode*>, comparePath> fringe; 
+        std::priority_queue<treeNode*, std::vector<treeNode*>, comparePath> fringe;
         bool foundSolution;
 };
 
