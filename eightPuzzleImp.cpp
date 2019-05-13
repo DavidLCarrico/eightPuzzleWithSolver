@@ -54,9 +54,9 @@ bool eightPuzzle::operator==(const eightPuzzle &otherPuzzle) const
     return true;
 }
 
-int eightPuzzle::manhattanDist() const
+size_t eightPuzzle::manhattanDist() const
 {
-    int dist = 0;
+    size_t distance = 0;
 
     for (int i = 0; i < 3; ++i)
     {
@@ -66,12 +66,12 @@ int eightPuzzle::manhattanDist() const
             if (tile)
             {
                 std::pair<int, int> index = indexOf[tile - 1];
-                dist += abs(i - index.first) + abs(j - index.second);
+                distance += abs(i - index.first) + abs(j - index.second);
             }
         }
     }
 
-    return dist;
+    return distance;
 }
 
 void eightPuzzle::scramble()
