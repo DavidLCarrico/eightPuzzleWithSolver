@@ -79,7 +79,6 @@ void puzzleSolver::setRoot(const eightPuzzle & state)
 
     fringe.push(newNode);
     nodesInTree.push_back(newNode);
-    statesInTree.insert(state);
 }
 
 treeNode* puzzleSolver::addNode(char m, treeNode *parentNode)
@@ -93,7 +92,7 @@ treeNode* puzzleSolver::addNode(char m, treeNode *parentNode)
     newNode->parent = parentNode;
     newNode->length = parentNode->length + 1;
 
-    if (statesInTree.find(newNode->state) != statesInTree.end())
+    if (parentNode->parent && newNode->state == parentNode->parent->state)
     {
         delete newNode;
         newNode = nullptr;
@@ -102,7 +101,6 @@ treeNode* puzzleSolver::addNode(char m, treeNode *parentNode)
     {
         fringe.push(newNode);
         nodesInTree.push_back(newNode);
-        statesInTree.insert(newNode->state);
     }
 
     return newNode;
@@ -137,6 +135,4 @@ void puzzleSolver::deleteTree()
     }
 
     nodesInTree.clear();
-
-    statesInTree.clear();
 }

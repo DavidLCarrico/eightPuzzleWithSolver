@@ -4,7 +4,6 @@
 #include <queue>
 #include <vector>
 #include <stack>
-#include <unordered_set>
 #include "eightPuzzle.hpp"
 
 struct treeNode
@@ -38,7 +37,6 @@ class puzzleSolver
         void deleteTree();
         std::stack<char> solution;
         std::vector<treeNode*> nodesInTree;
-        std::unordered_set<eightPuzzle, eightPuzzle::saxHash> statesInTree;
         std::priority_queue<treeNode*, std::vector<treeNode*>, comparePath> fringe;
         bool foundSolution;
 };
