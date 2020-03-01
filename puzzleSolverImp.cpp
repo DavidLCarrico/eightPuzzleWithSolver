@@ -68,7 +68,7 @@ void puzzleSolver::expandNode(treeNode *path)
     }
 }
 
-void puzzleSolver::setRoot(const eightPuzzle & state)
+void puzzleSolver::setRoot(const eightPuzzle &state)
 {
     treeNode *newNode = new treeNode;
 

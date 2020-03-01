@@ -98,6 +98,7 @@ void eightPuzzle::scramble()
         }
     }
 
+    // If the puzzle is not solvable, this swaps two tiles to make it solvable.
     if (numberOfInversions() % 2)
     {
         int rowWithoutZero = (rowOfZero + 1) % 3;

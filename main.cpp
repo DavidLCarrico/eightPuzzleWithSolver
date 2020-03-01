@@ -12,7 +12,7 @@ int main()
     eightPuzzle grid;
     puzzleSolver ai;
     char choice = '\0', direction = '\0';
-    int numberOfMoves = 0;;
+    int numberOfMoves = 0;
 
     std::cout << "Welcome to the eight puzzle game!" << std::endl;
     do
