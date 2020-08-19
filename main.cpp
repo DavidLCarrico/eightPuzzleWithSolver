@@ -18,6 +18,7 @@ int main()
     std::cout << "Welcome to the eight puzzle game!" << std::endl;
     do
     {
+        bool validMove = false;
         grid.scramble();
         numberOfMoves = 0;
         do
@@ -29,16 +30,21 @@ int main()
             switch (choice)
             {
                 case 'm': 
-                    std::cout << "\nWould you like to move (u)p, (d)own, (r)ight, or (l)eft? ";
-                    direction = getChar();
-                    if (grid.move(direction))
+                    do
                     {
-                        ++numberOfMoves;
-                    }
-                    else
-                    {
-                        std::cout << "\nInvalid move!" << std::endl;
-                    }
+                        std::cout << "\nWould you like to move (u)p, (d)own, (r)ight, or (l)eft? ";
+                        direction = getChar();
+
+                        if ((validMove = grid.move(direction)))
+                        {
+                            ++numberOfMoves;
+                        }
+                        else
+                        {
+                            std::cout << "\nInvalid move!" << std::endl;
+                            grid.print();
+                        }
+                    } while (!validMove);
                     break;
                 case 's':
                     ai.solve(grid);
