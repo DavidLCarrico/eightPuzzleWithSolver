@@ -4,15 +4,15 @@
 #include <unordered_map>
 #include "eightPuzzle.hpp"
 
-const std::pair<int, int> indexOf[8] = {{0, 0}, {0, 1}, {0, 2}, {1, 0}, {1, 1}, {1, 2}, {2, 0}, {2, 1}};
+const std::pair<size_t, size_t> indexOf[8] = {{0, 0}, {0, 1}, {0, 2}, {1, 0}, {1, 1}, {1, 2}, {2, 0}, {2, 1}};
 
 eightPuzzle::eightPuzzle()
 {
-    short int number = 1;
+    unsigned char number = 1;
 
-    for (int i =  0; i < 3; ++i)
+    for (size_t i =  0; i < 3; ++i)
     {
-        for (int j = 0; j < 3; ++j)
+        for (size_t j = 0; j < 3; ++j)
         {
             board[i][j] = number++ % 9;
         }
@@ -24,9 +24,9 @@ eightPuzzle::eightPuzzle()
 
 const eightPuzzle& eightPuzzle::operator=(const eightPuzzle &otherPuzzle)
 {
-    for (int i = 0; i < 3; ++i)
+    for (size_t i = 0; i < 3; ++i)
     {
-        for (int j = 0; j < 3; ++j)
+        for (size_t j = 0; j < 3; ++j)
         {
             board[i][j] = otherPuzzle.board[i][j];
         }
@@ -40,9 +40,9 @@ const eightPuzzle& eightPuzzle::operator=(const eightPuzzle &otherPuzzle)
 
 bool eightPuzzle::operator==(const eightPuzzle &otherPuzzle) const
 {
-    for (int i = 0; i < 3; ++i)
+    for (size_t i = 0; i < 3; ++i)
     {
-        for (int j = 0; j < 3; ++j)
+        for (size_t j = 0; j < 3; ++j)
         {
             if (board[i][j] != otherPuzzle.board[i][j])
             {
@@ -54,6 +54,37 @@ bool eightPuzzle::operator==(const eightPuzzle &otherPuzzle) const
     return true;
 }
 
+bool eightPuzzle::operator!=(const eightPuzzle &otherPuzzle) const
+{
+    for (size_t i = 0; i < 3; ++i)
+    {
+        for (size_t j = 0; j < 3; ++j)
+        {
+            if (board[i][j] != otherPuzzle.board[i][j])
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+size_t eightPuzzle::saxHash() const
+{
+    size_t h = 0;
+    for (size_t i = 0; i < 3; ++i)
+    {
+        for (size_t j = 0; j < 3; ++j)
+        {
+            h ^= (h << 5) + (h >> 2) + board[i][j];
+        }
+    }
+
+    return (h >> 14) ^ (h & 0x3ffff);
+}
+
+
 size_t eightPuzzle::manhattanDist() const
 {
     size_t distance = 0;
@@ -62,10 +93,10 @@ size_t eightPuzzle::manhattanDist() const
     {
         for (int j = 0; j < 3; ++j)
         {
-            int tile = board[i][j];
+            unsigned char tile = board[i][j];
             if (tile)
             {
-                std::pair<int, int> index = indexOf[tile - 1];
+                std::pair<size_t, size_t> index = indexOf[tile - 1];
                 distance += abs(i - index.first) + abs(j - index.second);
             }
         }
@@ -78,11 +109,11 @@ void eightPuzzle::scramble()
 {
     std::srand(std::time(nullptr));
 
-    for (int i = 0; i < 3; ++i)
+    for (size_t i = 0; i < 3; ++i)
     {
-        for (int j = 0; j < 3; ++j)
+        for (size_t j = 0; j < 3; ++j)
         {
-            short int value;
+            unsigned char value;
             do
             {
                 value = std::rand() % 9;
@@ -101,8 +132,8 @@ void eightPuzzle::scramble()
     // If the puzzle is not solvable, this swaps two tiles to make it solvable.
     if (numberOfInversions() % 2)
     {
-        int rowWithoutZero = (rowOfZero + 1) % 3;
-        short int temp = board[rowWithoutZero][0];
+        size_t rowWithoutZero = (rowOfZero + 1) % 3;
+        unsigned char temp = board[rowWithoutZero][0];
         board[rowWithoutZero][0] = board[rowWithoutZero][1];
         board[rowWithoutZero][1] = temp;
     }
@@ -158,13 +189,13 @@ bool eightPuzzle::move(char direction)
 void eightPuzzle::print() const
 {
     std::cout << std::endl;
-    for (int i = 0; i < 3; ++i)
+    for (size_t i = 0; i < 3; ++i)
     {
-        for (int j = 0; j < 3; ++j)
+        for (size_t j = 0; j < 3; ++j)
         {
             if (board[i][j])
             {
-                std::cout << board[i][j];
+                std::cout << static_cast<unsigned int>(board[i][j]);
             }
             else
             {
@@ -177,11 +208,11 @@ void eightPuzzle::print() const
 
 bool eightPuzzle::isSolved() const
 {
-    short int goal[3][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
+    unsigned char goal[3][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
 
-    for (int i = 0; i < 3; ++i)
+    for (size_t i = 0; i < 3; ++i)
     {
-        for (int j = 0; j < 3; ++j)
+        for (size_t j = 0; j < 3; ++j)
         {
             if (board[i][j] != goal[i][j])
             {
@@ -193,11 +224,11 @@ bool eightPuzzle::isSolved() const
     return true;
 }
 
-bool eightPuzzle::isNewValue(short int value, int row, int column) const
+bool eightPuzzle::isNewValue(unsigned char value, size_t row, size_t column) const
 {
-    for (int i = 0; i < 3; ++i)
+    for (size_t i = 0; i < 3; ++i)
     {
-        for (int j = 0; j < 3; ++j)
+        for (size_t j = 0; j < 3; ++j)
         {
             if ((i < row || j < column) && value == board[i][j])
             {
@@ -209,14 +240,14 @@ bool eightPuzzle::isNewValue(short int value, int row, int column) const
     return true;
 }
 
-int eightPuzzle::numberOfInversions() const
+size_t eightPuzzle::numberOfInversions() const
 {
-    int index = 0;
-    short int list[8];
+    size_t index = 0;
+    unsigned char list[8];
 
-    for (int i = 0; i < 3; ++i)
+    for (size_t i = 0; i < 3; ++i)
     {
-        for (int j = 0; j < 3; ++j)
+        for (size_t j = 0; j < 3; ++j)
         {
             if (board[i][j])
             {
@@ -225,10 +256,10 @@ int eightPuzzle::numberOfInversions() const
         }
     }
 
-    int totalNumberOfInversions = 0;
+    size_t totalNumberOfInversions = 0;
     for (index = 0; index < 8; ++index)
     {
-        for (int following = index + 1; following < 8; ++following)
+        for (size_t following = index + 1; following < 8; ++following)
         {
             if (list[index] > list[following])
             {

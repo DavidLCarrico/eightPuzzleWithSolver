@@ -4,6 +4,7 @@
 #include <limits>
 #include "eightPuzzle.hpp"
 #include "puzzleSolver.hpp"
+#include "treeNode.hpp"
 
 char getChar();
 

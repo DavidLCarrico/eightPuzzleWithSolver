@@ -8,7 +8,7 @@ puzzleSolver::puzzleSolver()
 
 void puzzleSolver::solve(const eightPuzzle &state)
 {
-    treeNode *tNode;
+    treeNode tNode;
 
     foundSolution = state.isSolved();
 
@@ -37,9 +37,9 @@ puzzleSolver::~puzzleSolver()
     deleteTree();
 }
 
-void puzzleSolver::expandNode(treeNode *path)
+void puzzleSolver::expandNode(treeNode path)
 {
-    treeNode *addedNode;
+    bool addedNode = false;
     
     for (int i = 0; i < 4; ++i)
     {
@@ -59,10 +59,11 @@ void puzzleSolver::expandNode(treeNode *path)
                 break;
         }
 
-        if (addedNode && addedNode->state.isSolved())
+        treeNode highestPriorityNode = fringe.top();
+        if (addedNode && highestPriorityNode.getState().isSolved())
         {
             foundSolution = true;
-            buildSolution(addedNode);
+            buildSolution(highestPriorityNode);
             break;
         }
     }
@@ -70,52 +71,56 @@ void puzzleSolver::expandNode(treeNode *path)
 
 void puzzleSolver::setRoot(const eightPuzzle &state)
 {
-    treeNode *newNode = new treeNode;
+    treeNode newNode;
 
-    newNode->state = state;
-    newNode->length = 0;
-    newNode->move = '\0';
-    newNode->parent = nullptr;
+    newNode.setState(state);
+    newNode.setLength(0);
+    newNode.setMove('\0');
+    newNode.setParent(nullptr);
 
     fringe.push(newNode);
-    nodesInTree.push_back(newNode);
+    nodesInTree.insert(newNode);
 }
 
-treeNode* puzzleSolver::addNode(char m, treeNode *parentNode)
+bool puzzleSolver::addNode(char m, treeNode parentNode)
 {
-    treeNode *newNode = new treeNode;
+    eightPuzzle newState;
 
-    newNode->state = parentNode->state;
-    newNode->move = m;
-    newNode->state.move(m);
+    newState = parentNode.getState();
 
-    newNode->parent = parentNode;
-    newNode->length = parentNode->length + 1;
-
-    if (parentNode->parent && newNode->state == parentNode->parent->state)
+    if (newState.move(m))
     {
-        delete newNode;
-        newNode = nullptr;
-    }
-    else
-    {
-        fringe.push(newNode);
-        nodesInTree.push_back(newNode);
+        if (!parentNode.getParent() || newState != parentNode.getParent()->getState())
+        {
+            treeNode newNode;
+            std::unordered_set<treeNode>::iterator parent = nodesInTree.find(parentNode);
+
+            newNode.setState(newState);
+            newNode.setLength(parentNode.getLength() + 1);
+            newNode.setMove(m);
+            newNode.setParent(&*parent);
+
+            fringe.push(newNode);
+            nodesInTree.insert(newNode);
+
+            return true;
+        }
     }
 
-    return newNode;
+    return false;
 }
 
-void puzzleSolver::buildSolution(treeNode *goalNode)
+void puzzleSolver::buildSolution(treeNode goalNode)
 {
-    treeNode *temp = goalNode;
+    const treeNode *temp = &goalNode;
     while (temp)
     {
-        if (temp->move)
+        char move = temp->getMove();
+        if (move)
         {
-            solution.push(temp->move);
+            solution.push(move);
         }
-        temp = temp->parent;
+        temp = temp->getParent();
     }
 }
 
@@ -124,14 +129,6 @@ void puzzleSolver::deleteTree()
     while (!fringe.empty())
     {
         fringe.pop();
-    }
-
-    for (treeNode *&tNode: nodesInTree)
-    {
-        if (tNode)
-        {
-            delete tNode;
-        }
     }
 
     nodesInTree.clear();

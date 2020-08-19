@@ -1,13 +1,13 @@
 CC = g++
-CPPFLAGS = -Wall -Wextra -Werror -O4
-objects = puzzleSolverImp.o eightPuzzleImp.o main.o
+CPPFLAGS = -Wall -Wextra -Werror -g
+objects = puzzleSolverImp.o treeNodeImp.o eightPuzzleImp.o main.o
 
 all: puzzleGame
 
-puzzleGame: main.o eightPuzzleImp.o puzzleSolverImp.o
-	$(CC) $(CPPFLAGS) -o puzzleGame main.o eightPuzzleImp.o puzzleSolverImp.o
+puzzleGame: $(objects)
+	$(CC) $(CPPFLAGS) -o puzzleGame $(objects)
 
-$(objects): eightPuzzle.hpp puzzleSolver.hpp
+$(objects): eightPuzzle.hpp treeNode.hpp puzzleSolver.hpp
 
 .PHONY: cleanobjects
 cleanobjects:
