@@ -1,3 +1,4 @@
+// Names of contributors: David Carrico
 #include "treeNode.hpp"
 
 bool treeNode::operator<(const treeNode &otherNode) const
